@@ -1,15 +1,93 @@
 <!doctype html>
-<!-- Re-authored in-session on 2026-11-19 for the resubmission: the transcript gate counts only code the uploaded sessions wrote. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Token Radar: pre-token protocols ranked by implied value</title>
+<title>Token Radar — radar-3 fitted launch pricing</title>
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
-<a class="skip" href="#board">Skip to the board</a>
-<main id="board" tabindex="-1" aria-busy="true"></main>
+<header class="topbar">
+  <div>
+    <h1>TOKEN RADAR <span class="dim">/ radar-3 · fitted launch pricing</span></h1>
+    <div class="sub" id="meta-line">loading…</div>
+  </div>
+  <div class="top-right" id="model-tag">radar-3</div>
+</header>
+
+<section id="kpis" aria-label="Key metrics"></section>
+
+<nav class="tabs" aria-label="Views">
+  <button data-view="board" class="active">▦ Board</button>
+  <button data-view="curve">∿ Curve</button>
+  <button data-view="validation">✓ Validation</button>
+</nav>
+
+<main>
+  <section id="view-board" class="view active">
+    <div class="controls">
+      <input id="q" type="search" placeholder="filter by name or slug…" autocomplete="off">
+      <select id="cat-filter" aria-label="Category filter"></select>
+      <label class="chk"><input id="wl-only" type="checkbox"> watchlist only</label>
+      <span class="count" id="board-count"></span>
+    </div>
+    <div class="table-wrap">
+      <table id="board-table">
+        <thead>
+          <tr>
+            <th data-key="rank">#</th>
+            <th data-key="name">Protocol</th>
+            <th data-key="category">Category</th>
+            <th data-key="chain">Chain</th>
+            <th data-key="tvl_usd" class="num">TVL</th>
+            <th data-key="implied_value_usd" class="num">Implied value</th>
+            <th data-key="multiple" class="num">Multiple</th>
+            <th data-key="change_7d" class="num">7d</th>
+            <th data-key="age_days" class="num">Age</th>
+            <th data-key="watchlist">WL</th>
+          </tr>
+        </thead>
+        <tbody id="board-body"></tbody>
+      </table>
+    </div>
+    <p class="hint">Click a row for the detail drawer: fitted vs actual multiple and the 6-step netted farm plan. Click a column header to sort.</p>
+  </section>
+
+  <section id="view-curve" class="view">
+    <div class="controls">
+      <label>Curve
+        <select id="curve-select" aria-label="Curve selector"></select>
+      </label>
+      <span class="count" id="curve-note"></span>
+    </div>
+    <svg id="curve-svg" viewBox="0 0 760 430" role="img" aria-label="Log TVL vs log market cap scatter with fitted curve"></svg>
+    <p class="hint">Each dot is a launched protocol (mcap ≥ $1M). Axes are log10. The line is the fitted quadratic log10(mcap) = a + b·x + c·x² for the selected curve.</p>
+  </section>
+
+  <section id="view-validation" class="view">
+    <h2>Out-of-sample validation — 5 folds</h2>
+    <p class="hint" id="validation-method"></p>
+    <table id="fold-table">
+      <thead>
+        <tr><th>Fold</th><th class="num">n</th><th class="num">Median APE</th><th class="num">Within ±25%</th></tr>
+      </thead>
+      <tbody id="fold-body"></tbody>
+    </table>
+    <h2>Fitted curves — in-sample R²</h2>
+    <table id="fit-table">
+      <thead>
+        <tr><th>Curve</th><th class="num">n</th><th class="num">R²</th><th class="num">a</th><th class="num">b</th><th class="num">c</th></tr>
+      </thead>
+      <tbody id="fit-body"></tbody>
+    </table>
+  </section>
+</main>
+
+<aside id="drawer" aria-label="Protocol detail">
+  <button id="drawer-close" aria-label="Close detail">✕</button>
+  <div id="drawer-body"></div>
+</aside>
+
 <script src="../data.js"></script>
 <script src="app.js"></script>
 </body>
