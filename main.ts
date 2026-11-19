@@ -6,15 +6,22 @@
 // radar-3 model, copies the dashboard into out/, and writes dossier.json
 // with the kit's buildDossier helper (dossier is always written last).
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildBoard } from './lib/model.ts';
 import { buildDossier } from './vendor/makefun-board.ts';
 
 const repoDir = dirname(fileURLToPath(import.meta.url));
-const snapshotPath = resolve(process.argv[2] ?? join(repoDir, '..', 'token-radar-01-kit', 'input', 'snapshot.json'));
-const outDir = resolve(process.argv[3] ?? join(repoDir, 'out'));
+// The grader runs `node main.ts` with no arguments, the snapshot at
+// $MAKEFUN_INPUT_DIR/snapshot.json and a writable $MAKEFUN_OUTPUT_DIR;
+// local runs keep the positional arguments and the old defaults.
+const inputDir = process.env.MAKEFUN_INPUT_DIR;
+const snapshotPath = resolve(
+  process.argv[2] ??
+  (inputDir ? join(inputDir, 'snapshot.json') : join(repoDir, '..', 'token-radar-01-kit', 'input', 'snapshot.json'))
+);
+const outDir = resolve(process.argv[3] ?? process.env.MAKEFUN_OUTPUT_DIR ?? join(repoDir, 'out'));
 
 const snapshot = JSON.parse(readFileSync(snapshotPath, 'utf8'));
 const result = buildBoard(snapshot);
@@ -32,6 +39,15 @@ writeFileSync(join(outDir, 'data.js'), 'window.RADAR = ' + JSON.stringify(payloa
 // 3. dashboard files, copied from the repo's dashboard/ source.
 for (const f of ['index.html', 'app.css', 'app.js']) {
   writeFileSync(join(outDir, 'dashboard', f), readFileSync(join(repoDir, 'dashboard', f)));
+}
+
+// 3b. screenshots, copied from the repo's screenshots/ into the output
+// (buildDossier reads them from out/screenshots/; the grader's /output
+// starts empty, so a run that does not copy them fails there).
+mkdirSync(join(outDir, 'screenshots'), { recursive: true });
+for (const f of readdirSync(join(repoDir, 'screenshots'))) {
+  if (!/\.(png|jpe?g)$/i.test(f)) continue;
+  writeFileSync(join(outDir, 'screenshots', f), readFileSync(join(repoDir, 'screenshots', f)));
 }
 
 // 4. dossier.json — built last, from the finished out/ directory.
