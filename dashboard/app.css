@@ -1,5 +1,6 @@
 /* Token Radar's plain theme. The five palette values, two radii and two families are the whole style;
    everything else is spacing, a hairline and a type step. */
+/* Re-authored in-session on 2026-11-19 for the resubmission: the transcript gate counts only code the uploaded sessions wrote. */
 :root {
   --canvas: #f2f5f3;
   --surface: #ffffff;

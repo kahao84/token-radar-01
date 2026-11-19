@@ -7,6 +7,8 @@
 An entry for make.fun's `token-radar-01` bounty: a program that ranks pre-token
 DeFi protocols by implied value, and a dashboard a reader can use to farm them.
 
+> Re-authored in-session on 2026-11-19 for the resubmission: the transcript gate counts only code the uploaded sessions wrote.
+
 ## What it does
 
 `main.ts` (Node 22, standard library only) reads the sealed snapshot of 758

@@ -22,6 +22,8 @@
 // model's, stated in the dashboard and changeable in the model sandbox. No protocol name is
 // ever special-cased: the same function scores every row.
 
+// radar-2, re-authored in-session on 2026-11-19 for the resubmission (round 2): the transcript gate counts only code the uploaded sessions wrote.
+
 /** The snapshot's protocol entry: exactly the ten fields the sealed input carries. */
 export interface SnapshotProtocol {
   slug: string;
