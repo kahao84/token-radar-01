@@ -533,7 +533,7 @@ export function buildBoard(snapshot: Snapshot): BuildResult {
       protocols: protos.length,
       controlN: control.length,
       categoriesFitted: categoryFits.size,
-      builtAt: new Date().toISOString(),
+      builtAt: asOf, // fixed to the snapshot date: wall-clock time would make two runs differ
     },
   };
 }
